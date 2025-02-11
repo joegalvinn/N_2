@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:nash_app_2/screens/map_screen.dart';
+import 'map_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

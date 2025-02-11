@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
-import 'weather_page.dart';
-import 'web_view_page.dart';
+import 'recent_casts.dart';
+import 'current_sessions.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class MapScreen extends StatefulWidget {
@@ -79,24 +79,25 @@ class _MapScreenState extends State<MapScreen> {
             ListTile(
               leading: const Icon(Icons.cloud),
               title: const Text(
-                'Weather Page',
+                'Current Sessions',
                 style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
               ),
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const WeatherPage()),
+                  MaterialPageRoute(
+                      builder: (context) => const CurrentSessions()),
                 );
               },
             ),
             const Divider(),
             ListTile(
               leading: const Icon(Icons.web),
-              title: const Text('Contact Us Page'),
+              title: const Text('Recent Casts'),
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const WebViewApp()),
+                  MaterialPageRoute(builder: (context) => const RecentCasts()),
                 );
               },
             ),
