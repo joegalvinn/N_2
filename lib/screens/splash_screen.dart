@@ -16,15 +16,16 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   void initState() {
     super.initState();
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
-
+    // Set the system UI to immersive sticky to hide the status and navigation bars
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky,
+        overlays: []);
     Future.delayed(Duration.zero, () {
       setState(() {
         _opacity = 1.0; // Set opacity to 1 for fade-in
       });
     });
 
-// Navigate after the fade-out animation
+    // Navigate after the fade-out animation
     Future.delayed(const Duration(seconds: 3), () {
       setState(() {
         _opacity = 0.0; // Set opacity to 0 for fade-out
@@ -41,6 +42,7 @@ class _SplashScreenState extends State<SplashScreen>
 
   @override
   void dispose() {
+    // Restore system UI overlays when the splash screen is disposed
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
         overlays: SystemUiOverlay.values);
     super.dispose();
@@ -52,32 +54,15 @@ class _SplashScreenState extends State<SplashScreen>
       body: AnimatedOpacity(
         duration: const Duration(seconds: 1), // Animation duration
         opacity: _opacity, // Set the current opacity
-        child: Container(
+        child: SizedBox(
           width: double.infinity,
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                Color(0xFF039BE5), // Light Blue 600
-                Color(0xFF90CAF9), // Blue 200
-                Color(0xFF0D47A1), // Blue 900
-              ],
-              begin: Alignment.topRight,
-              end: Alignment.bottomLeft,
-            ),
-          ),
+          height: double.infinity, // Ensure it takes full height
           child: Center(
             child: Image.asset(
-              'images/splash-gif.gif',
+              'images/splash-gif.gif', // Full-screen GIF
+              fit: BoxFit.cover, // Make the GIF cover the entire screen
             ),
           ),
-          // child: Center(
-          //   child: Image.asset(
-          //     'images/fishlogo.png',
-          //     width: 200, // Adjust the width as needed
-          //     height: 200, // Adjust the height as needed
-          //     fit: BoxFit.contain, // Ensure the image scales correctly
-          //   ),
-          // ),
         ),
       ),
     );

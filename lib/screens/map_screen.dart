@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
-import 'recent_casts.dart';
-import 'current_sessions.dart';
+import 'drawer_linked_pages/profile_page.dart';
+import 'drawer_linked_pages/recent_casts.dart';
+import 'drawer_linked_pages/current_sessions.dart';
+import 'drawer_linked_pages/places.dart';
+import 'drawer_linked_pages/catches.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class MapScreen extends StatefulWidget {
@@ -65,17 +68,45 @@ class _MapScreenState extends State<MapScreen> {
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(
-                color: Color.fromARGB(255, 33, 150, 243),
+            // const DrawerHeader(
+            //   decoration: BoxDecoration(
+            //     color: Color.fromARGB(255, 33, 150, 243),
+            //   ),
+            //   child: Center(
+            //     child: Text(
+            //       'Pages',
+            //       style: TextStyle(fontSize: 24, color: Colors.white),
+            //     ),
+            //   ),
+            // ),
+            const SizedBox(height: 100),
+            ListTile(
+              leading: const Icon(Icons.cloud),
+              title: const Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Username Here',
+                    style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+                  ),
+                  SizedBox(
+                      height:
+                          4), // Adds some space between the two lines of text
+                  Text(
+                    'email here',
+                    style: TextStyle(
+                        color: Color.fromARGB(255, 0, 0, 0), fontSize: 14),
+                  ),
+                ],
               ),
-              child: Center(
-                child: Text(
-                  'Pages',
-                  style: TextStyle(fontSize: 24, color: Colors.white),
-                ),
-              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Profile()),
+                );
+              },
             ),
+            const Divider(),
             ListTile(
               leading: const Icon(Icons.cloud),
               title: const Text(
@@ -98,6 +129,28 @@ class _MapScreenState extends State<MapScreen> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const RecentCasts()),
+                );
+              },
+            ),
+            const Divider(),
+            ListTile(
+              leading: const Icon(Icons.web),
+              title: const Text('Places'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Places()),
+                );
+              },
+            ),
+            const Divider(),
+            ListTile(
+              leading: const Icon(Icons.web),
+              title: const Text('Catches'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Catches()),
                 );
               },
             ),
