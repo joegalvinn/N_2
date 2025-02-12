@@ -6,6 +6,10 @@ import 'drawer_linked_pages/recent_casts.dart';
 import 'drawer_linked_pages/current_sessions.dart';
 import 'drawer_linked_pages/places.dart';
 import 'drawer_linked_pages/catches.dart';
+import 'drawer_linked_pages/weather.dart';
+import 'drawer_linked_pages/support.dart';
+import 'drawer_linked_pages/store.dart';
+import 'drawer_linked_pages/settings.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class MapScreen extends StatefulWidget {
@@ -82,22 +86,26 @@ class _MapScreenState extends State<MapScreen> {
             const SizedBox(height: 100),
             ListTile(
               leading: const Icon(Icons.cloud),
-              title: const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Username Here',
-                    style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
-                  ),
-                  SizedBox(
-                      height:
-                          4), // Adds some space between the two lines of text
-                  Text(
-                    'email here',
-                    style: TextStyle(
-                        color: Color.fromARGB(255, 0, 0, 0), fontSize: 14),
-                  ),
-                ],
+              title: const Center(
+                // Centers the entire text block horizontally
+                child: Column(
+                  mainAxisSize:
+                      MainAxisSize.min, // Prevents unnecessary stretching
+                  crossAxisAlignment: CrossAxisAlignment
+                      .start, // Aligns text to the left within the block
+                  children: [
+                    Text(
+                      'Username Here',
+                      style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+                    ),
+                    SizedBox(height: 4),
+                    Text(
+                      'email here',
+                      style: TextStyle(
+                          color: Color.fromARGB(255, 0, 0, 0), fontSize: 14),
+                    ),
+                  ],
+                ),
               ),
               onTap: () {
                 Navigator.push(
@@ -106,6 +114,8 @@ class _MapScreenState extends State<MapScreen> {
                 );
               },
             ),
+
+            const SizedBox(height: 35),
             const Divider(),
             ListTile(
               leading: const Icon(Icons.cloud),
@@ -151,6 +161,50 @@ class _MapScreenState extends State<MapScreen> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const Catches()),
+                );
+              },
+            ),
+            const Divider(),
+            ListTile(
+              leading: const Icon(Icons.web),
+              title: const Text('Weather'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Weather()),
+                );
+              },
+            ),
+            const Divider(),
+            ListTile(
+              leading: const Icon(Icons.web),
+              title: const Text('Store'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Store()),
+                );
+              },
+            ),
+            const Divider(),
+            ListTile(
+              leading: const Icon(Icons.web),
+              title: const Text('Settings'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Settings()),
+                );
+              },
+            ),
+            const Divider(),
+            ListTile(
+              leading: const Icon(Icons.web),
+              title: const Text('Support'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Support()),
                 );
               },
             ),
