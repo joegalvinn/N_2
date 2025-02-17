@@ -207,9 +207,9 @@ class _MapScreenState extends State<MapScreen> {
           ),
           Positioned(
             top: 30,
-            left: 10,
+            left: 22,
             child: IconButton(
-              icon: const Icon(Icons.menu, color: Colors.black),
+              icon: const Icon(Icons.menu, size: 35, color: Colors.blue),
               onPressed: () {
                 scaffoldKey.currentState?.openDrawer();
               },
