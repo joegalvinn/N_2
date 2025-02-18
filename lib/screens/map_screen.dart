@@ -10,6 +10,7 @@ import 'drawer_linked_pages/weather.dart';
 import 'drawer_linked_pages/support.dart';
 import 'drawer_linked_pages/store.dart';
 import 'drawer_linked_pages/settings.dart';
+import 'hotspot_settings.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key});
@@ -218,7 +219,7 @@ class _MapScreenState extends State<MapScreen> {
           // Floating Search Bar Positioned at the Top Center
           Positioned(
             top: 30,
-            left: 100,
+            left: 90,
             child: Container(
               width: 230,
               padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -275,6 +276,49 @@ class _MapScreenState extends State<MapScreen> {
                     ),
             ),
           ),
+          Positioned(
+            top: 20,
+            right: 20,
+            child: Column(
+              mainAxisSize:
+                  MainAxisSize.min, // Ensures tight wrapping of children
+              children: [
+                IconButton(
+                  icon: const Icon(
+                    Icons.warning_amber_rounded,
+                    size: 40,
+                    color: Colors.red,
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const Hotspot()),
+                    );
+                  },
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const Hotspot()),
+                    );
+                  },
+                  child: Transform.translate(
+                    offset: const Offset(0, -10), // Moves text up slightly
+                    child: const Text(
+                      'Hotspots',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.red,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
           Positioned(
             bottom: 190,
             right: 20,
