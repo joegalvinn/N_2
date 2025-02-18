@@ -10,7 +10,7 @@ import 'drawer_linked_pages/weather.dart';
 import 'drawer_linked_pages/support.dart';
 import 'drawer_linked_pages/store.dart';
 import 'drawer_linked_pages/settings.dart';
-import 'hotspot_settings.dart';
+import 'mapscreen_linked_pages/hotspot_settings.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key});
@@ -30,23 +30,27 @@ class _MapScreenState extends State<MapScreen> {
   final TextEditingController _searchController = TextEditingController();
   bool _isSearching = false;
 
-  void _resetOrientation() {
-    _mapController.rotate(0.0);
-  }
+//!----------------------------- map buttons if needed
 
-  void _zoomIn() {
-    double currentZoom = _mapController.zoom;
-    if (currentZoom < _maxZoom) {
-      _mapController.move(_mapController.center, currentZoom + 1);
-    }
-  }
+  // void _resetOrientation() {
+  //   _mapController.rotate(0.0);
+  // }
 
-  void _zoomOut() {
-    double currentZoom = _mapController.zoom;
-    if (currentZoom > _minZoom) {
-      _mapController.move(_mapController.center, currentZoom - 1);
-    }
-  }
+  // void _zoomIn() {
+  //   double currentZoom = _mapController.zoom;
+  //   if (currentZoom < _maxZoom) {
+  //     _mapController.move(_mapController.center, currentZoom + 1);
+  //   }
+  // }
+
+  // void _zoomOut() {
+  //   double currentZoom = _mapController.zoom;
+  //   if (currentZoom > _minZoom) {
+  //     _mapController.move(_mapController.center, currentZoom - 1);
+  //   }
+  // }
+
+//!-----------------------------
 
   @override
   Widget build(BuildContext context) {
@@ -207,7 +211,7 @@ class _MapScreenState extends State<MapScreen> {
             ],
           ),
           Positioned(
-            top: 30,
+            top: 40,
             left: 22,
             child: IconButton(
               icon: const Icon(Icons.menu, size: 35, color: Colors.blue),
@@ -218,66 +222,69 @@ class _MapScreenState extends State<MapScreen> {
           ),
           // Floating Search Bar Positioned at the Top Center
           Positioned(
-            top: 30,
-            left: 90,
-            child: Container(
-              width: 230,
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(
-                  width: 1,
-                ),
-                borderRadius: BorderRadius.circular(25),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
-                    spreadRadius: 2,
-                    blurRadius: 5,
-                    offset: const Offset(0, 3),
+            top: 40,
+            left: 0,
+            right: 0,
+            child: Center(
+              child: Container(
+                width: 230,
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border.all(
+                    width: 1,
                   ),
-                ],
-              ),
-              child: _isSearching
-                  ? Center(
-                      // Use Center widget to ensure the TextField is centered
-                      child: TextField(
-                        controller: _searchController,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          suffixIcon: IconButton(
-                            icon: const Icon(Icons.clear),
+                  borderRadius: BorderRadius.circular(25),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 2,
+                      blurRadius: 5,
+                      offset: const Offset(0, 3),
+                    ),
+                  ],
+                ),
+                child: _isSearching
+                    ? Center(
+                        // Use Center widget to ensure the TextField is centered
+                        child: TextField(
+                          controller: _searchController,
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            suffixIcon: IconButton(
+                              icon: const Icon(Icons.clear),
+                              onPressed: () {
+                                setState(() {
+                                  _searchController.clear();
+                                });
+                              },
+                            ),
+                          ),
+                        ),
+                      )
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            'locations',
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.w200),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.search),
                             onPressed: () {
                               setState(() {
-                                _searchController.clear();
+                                _isSearching = true;
                               });
                             },
                           ),
-                        ),
+                        ],
                       ),
-                    )
-                  : Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          'locations',
-                          style: TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.w200),
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.search),
-                          onPressed: () {
-                            setState(() {
-                              _isSearching = true;
-                            });
-                          },
-                        ),
-                      ],
-                    ),
+              ),
             ),
           ),
           Positioned(
-            top: 20,
+            top: 30,
             right: 20,
             child: Column(
               mainAxisSize:
@@ -286,7 +293,7 @@ class _MapScreenState extends State<MapScreen> {
                 IconButton(
                   icon: const Icon(
                     Icons.warning_amber_rounded,
-                    size: 40,
+                    size: 37,
                     color: Colors.red,
                   ),
                   onPressed: () {
@@ -308,7 +315,7 @@ class _MapScreenState extends State<MapScreen> {
                     child: const Text(
                       'Hotspots',
                       style: TextStyle(
-                        fontSize: 12,
+                        fontSize: 11,
                         fontWeight: FontWeight.bold,
                         color: Colors.red,
                       ),
@@ -318,46 +325,76 @@ class _MapScreenState extends State<MapScreen> {
               ],
             ),
           ),
-
           Positioned(
-            bottom: 190,
-            right: 20,
-            child: FloatingActionButton(
-              onPressed: _resetOrientation,
-              backgroundColor: Colors.blue,
-              child: const Icon(
-                Icons.compass_calibration,
-                size: 35,
-                color: Colors.white,
+            bottom: 30,
+            left: 0,
+            right: 0,
+            child: Center(
+              child: SizedBox(
+                height: 55,
+                width: 150, // Adjust the width as needed
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const CurrentSessions()),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 15), // Only vertical padding
+                  ),
+                  child: const Text(
+                    'Start Session',
+                    style: TextStyle(fontSize: 16, color: Colors.white),
+                  ),
+                ),
               ),
             ),
           ),
-          Positioned(
-            bottom: 130,
-            right: 20,
-            child: FloatingActionButton(
-              onPressed: _zoomIn,
-              backgroundColor: Colors.blue,
-              child: const Icon(
-                Icons.zoom_in,
-                size: 35,
-                color: Colors.white,
-              ),
-            ),
-          ),
-          Positioned(
-            bottom: 70,
-            right: 20,
-            child: FloatingActionButton(
-              onPressed: _zoomOut,
-              backgroundColor: Colors.blue,
-              child: const Icon(
-                Icons.zoom_out,
-                size: 35,
-                color: Colors.white,
-              ),
-            ),
-          ),
+//!----------------------------- map buttons if needed
+          // Positioned(
+          //   bottom: 190,
+          //   right: 20,
+          //   child: FloatingActionButton(
+          //     onPressed: _resetOrientation,
+          //     backgroundColor: Colors.blue,
+          //     child: const Icon(
+          //       Icons.compass_calibration,
+          //       size: 35,
+          //       color: Colors.white,
+          //     ),
+          //   ),
+          // ),
+          // Positioned(
+          //   bottom: 130,
+          //   right: 20,
+          //   child: FloatingActionButton(
+          //     onPressed: _zoomIn,
+          //     backgroundColor: Colors.blue,
+          //     child: const Icon(
+          //       Icons.zoom_in,
+          //       size: 35,
+          //       color: Colors.white,
+          //     ),
+          //   ),
+          // ),
+          // Positioned(
+          //   bottom: 70,
+          //   right: 20,
+          //   child: FloatingActionButton(
+          //     onPressed: _zoomOut,
+          //     backgroundColor: Colors.blue,
+          //     child: const Icon(
+          //       Icons.zoom_out,
+          //       size: 35,
+          //       color: Colors.white,
+          //     ),
+          //   ),
+          // ),
+//!-----------------------------
         ],
       ),
     );
