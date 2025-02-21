@@ -11,6 +11,7 @@ import 'drawer_linked_pages/support.dart';
 import 'drawer_linked_pages/store.dart';
 import 'drawer_linked_pages/settings.dart';
 import 'mapscreen_linked_pages/hotspot_settings.dart';
+import 'mapscreen_linked_pages/camera_page.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key});
@@ -28,8 +29,14 @@ class _MapScreenState extends State<MapScreen> {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   final TextEditingController _searchController = TextEditingController();
-  bool _isSearching = false;
+  bool _showOverlay = false;
+  // bool _isSearching = false;
 
+  void _toggleOverlay() {
+    setState(() {
+      _showOverlay = !_showOverlay;
+    });
+  }
 //!----------------------------- map buttons if needed
 
   // void _resetOrientation() {
@@ -64,127 +71,42 @@ class _MapScreenState extends State<MapScreen> {
             ListTile(
               leading: const Icon(Icons.cloud),
               title: const Center(
-                // Centers the entire text block horizontally
                 child: Column(
-                  mainAxisSize:
-                      MainAxisSize.min, // Prevents unnecessary stretching
-                  crossAxisAlignment: CrossAxisAlignment
-                      .start, // Aligns text to the left within the block
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'Username Here',
-                      style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
-                    ),
+                    Text('Username Here',
+                        style: TextStyle(color: Colors.black)),
                     SizedBox(height: 4),
-                    Text(
-                      'email here',
-                      style: TextStyle(
-                          color: Color.fromARGB(255, 0, 0, 0), fontSize: 14),
-                    ),
+                    Text('email here',
+                        style: TextStyle(color: Colors.black, fontSize: 14)),
                   ],
                 ),
               ),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const Profile()),
-                );
-              },
+              onTap: () => Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const Profile())),
             ),
-            const SizedBox(height: 15),
-            const Divider(),
-            ListTile(
-              leading: const Icon(Icons.cloud),
-              title: const Text(
-                'Current Sessions',
-                style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
-              ),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const CurrentSessions()),
-                );
-              },
-            ),
-            const Divider(),
-            ListTile(
-              leading: const Icon(Icons.web),
-              title: const Text('Recent Casts'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const RecentCasts()),
-                );
-              },
-            ),
-            const Divider(),
-            ListTile(
-              leading: const Icon(Icons.web),
-              title: const Text('Places'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const Places()),
-                );
-              },
-            ),
-            const Divider(),
-            ListTile(
-              leading: const Icon(Icons.web),
-              title: const Text('Catches'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const Catches()),
-                );
-              },
-            ),
-            const Divider(),
-            ListTile(
-              leading: const Icon(Icons.web),
-              title: const Text('Weather'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const Weather()),
-                );
-              },
-            ),
-            const Divider(),
-            ListTile(
-              leading: const Icon(Icons.web),
-              title: const Text('Store'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const Store()),
-                );
-              },
-            ),
-            const Divider(),
-            ListTile(
-              leading: const Icon(Icons.web),
-              title: const Text('Settings'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const Settings()),
-                );
-              },
-            ),
-            const Divider(),
-            ListTile(
-              leading: const Icon(Icons.web),
-              title: const Text('Support'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const Support()),
-                );
-              },
-            ),
-            const Divider(),
+            ...[
+              {'title': 'Current Sessions', 'page': const CurrentSessions()},
+              {'title': 'Recent Casts', 'page': const RecentCasts()},
+              {'title': 'Places', 'page': const Places()},
+              {'title': 'Catches', 'page': const Catches()},
+              {'title': 'Weather', 'page': const Weather()},
+              {'title': 'Store', 'page': const Store()},
+              {'title': 'Settings', 'page': const Settings()},
+              {'title': 'Support', 'page': const Support()},
+            ].map((item) => Column(
+                  children: [
+                    const Divider(),
+                    ListTile(
+                      title: Text(item['title'] as String),
+                      onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => item['page'] as Widget)),
+                    ),
+                  ],
+                )),
           ],
         ),
       ),
@@ -225,64 +147,28 @@ class _MapScreenState extends State<MapScreen> {
             top: 40,
             left: 0,
             right: 0,
-            child: Center(
-              child: Container(
-                width: 230,
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(
-                    width: 1,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 90),
+              child: TextField(
+                controller: _searchController,
+                decoration: InputDecoration(
+                  hintText: 'Search location',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(25),
                   ),
-                  borderRadius: BorderRadius.circular(25),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 2,
-                      blurRadius: 5,
-                      offset: const Offset(0, 3),
-                    ),
-                  ],
+                  filled: true,
+                  fillColor: Colors.white,
+                  suffixIcon: IconButton(
+                    icon: const Icon(Icons.clear),
+                    onPressed: () {
+                      _searchController.clear();
+                    },
+                  ),
                 ),
-                child: _isSearching
-                    ? Center(
-                        // Use Center widget to ensure the TextField is centered
-                        child: TextField(
-                          controller: _searchController,
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            suffixIcon: IconButton(
-                              icon: const Icon(Icons.clear),
-                              onPressed: () {
-                                setState(() {
-                                  _searchController.clear();
-                                });
-                              },
-                            ),
-                          ),
-                        ),
-                      )
-                    : Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            'locations',
-                            style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.w200),
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.search),
-                            onPressed: () {
-                              setState(() {
-                                _isSearching = true;
-                              });
-                            },
-                          ),
-                        ],
-                      ),
               ),
             ),
           ),
+
           Positioned(
             top: 30,
             right: 20,
@@ -326,6 +212,27 @@ class _MapScreenState extends State<MapScreen> {
             ),
           ),
           Positioned(
+            bottom: 32,
+            left: 30,
+            child: Center(
+              child: Container(
+                decoration: const BoxDecoration(
+                  color: Colors.blue, // Blue background color
+                  shape: BoxShape.circle, // Circular shape
+                ),
+                child: IconButton(
+                  icon: const Icon(
+                    Icons.camera_alt_rounded,
+                    color: Colors.white, // Icon color
+                  ),
+                  onPressed: _toggleOverlay,
+                  iconSize: 25, // Icon size
+                ),
+              ),
+            ),
+          ),
+
+          Positioned(
             bottom: 30,
             left: 0,
             right: 0,
@@ -354,6 +261,43 @@ class _MapScreenState extends State<MapScreen> {
               ),
             ),
           ),
+          if (_showOverlay)
+            GestureDetector(
+              onTap: _toggleOverlay,
+              child: Container(
+                color: Colors.black.withOpacity(0.5),
+                child: Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const CameraPage()), // Navigate to CameraPage
+                          );
+                        },
+                        child: const Text('Go to Camera Page'),
+                      ),
+                      const SizedBox(height: 10),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const CameraPage()), // Navigate to CameraPage
+                          );
+                        },
+                        child: const Text('Go to Camera Page'),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
 //!----------------------------- map buttons if needed
           // Positioned(
           //   bottom: 190,
