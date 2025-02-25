@@ -21,16 +21,17 @@ class _SplashScreenState extends State<SplashScreen>
         overlays: []);
     Future.delayed(Duration.zero, () {
       setState(() {
-        _opacity = 1.0; // Set opacity to 1 for fade-in
+        _opacity = 1.0;
       });
     });
 
     // Navigate after the fade-out animation
     Future.delayed(const Duration(seconds: 3), () {
       setState(() {
-        _opacity = 0.0; // Set opacity to 0 for fade-out
+        _opacity = 0.0;
       });
       Future.delayed(const Duration(seconds: 1), () {
+        // ignore: use_build_context_synchronously
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
             builder: (_) => const MapScreen(),
@@ -52,15 +53,15 @@ class _SplashScreenState extends State<SplashScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       body: AnimatedOpacity(
-        duration: const Duration(seconds: 1), // Animation duration
-        opacity: _opacity, // Set the current opacity
+        duration: const Duration(seconds: 1),
+        opacity: _opacity,
         child: SizedBox(
           width: double.infinity,
-          height: double.infinity, // Ensure it takes full height
+          height: double.infinity,
           child: Center(
             child: Image.asset(
-              'images/splash-gif.gif', // Full-screen GIF
-              fit: BoxFit.cover, // Make the GIF cover the entire screen
+              'images/splash-gif.gif',
+              fit: BoxFit.cover,
             ),
           ),
         ),

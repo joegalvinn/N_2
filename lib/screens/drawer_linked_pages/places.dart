@@ -50,7 +50,7 @@ class PlaceholderPage extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                     builder: (context) =>
-                        const MapScreen()), // Change to your desired screen
+                        const MapScreen()),
               );
             },
           ),
@@ -60,10 +60,10 @@ class PlaceholderPage extends StatelessWidget {
         child: Container(
           width: 200,
           height: 200,
-          color: Colors.grey[300], // Placeholder color
+          color: Colors.grey[300], 
           child: const Center(
             child: Text(
-              'Placeholder',
+              'Places Page',
               style: TextStyle(fontSize: 18, color: Colors.black),
             ),
           ),

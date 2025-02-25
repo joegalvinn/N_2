@@ -1,19 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 import 'package:nash_app_2/screens/map_screen.dart';
 
-class Store extends StatelessWidget {
+class Store extends StatefulWidget {
   const Store({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: PlaceholderPage(),
-    );
-  }
+  // ignore: library_private_types_in_public_api
+  _StoreState createState() => _StoreState();
 }
 
-class PlaceholderPage extends StatelessWidget {
-  const PlaceholderPage({super.key});
+class _StoreState extends State<Store> {
+  late final WebViewController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..loadRequest(Uri.parse('https://www.nashtackle.co.uk/en/tackle/'));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +35,6 @@ class PlaceholderPage extends StatelessWidget {
             );
           },
         ),
-        title: null,
         backgroundColor: const Color.fromARGB(255, 33, 150, 243),
         flexibleSpace: Center(
           child: Padding(
@@ -48,27 +53,13 @@ class PlaceholderPage extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                    builder: (context) =>
-                        const MapScreen()), // Change to your desired screen
+                MaterialPageRoute(builder: (context) => const MapScreen()),
               );
             },
           ),
         ],
       ),
-      body: Center(
-        child: Container(
-          width: 200,
-          height: 200,
-          color: Colors.grey[300], // Placeholder color
-          child: const Center(
-            child: Text(
-              'Placeholder',
-              style: TextStyle(fontSize: 18, color: Colors.black),
-            ),
-          ),
-        ),
-      ),
+      body: WebViewWidget(controller: _controller),
     );
   }
 }

@@ -30,49 +30,36 @@ class _MapScreenState extends State<MapScreen> {
 
   final TextEditingController _searchController = TextEditingController();
   bool _showOverlay = false;
-  // bool _isSearching = false;
+
+  // Track the selected index for drawer
+  int _selectedIndex = -1;
 
   void _toggleOverlay() {
     setState(() {
       _showOverlay = !_showOverlay;
     });
   }
-//!----------------------------- map buttons if needed
-
-  // void _resetOrientation() {
-  //   _mapController.rotate(0.0);
-  // }
-
-  // void _zoomIn() {
-  //   double currentZoom = _mapController.zoom;
-  //   if (currentZoom < _maxZoom) {
-  //     _mapController.move(_mapController.center, currentZoom + 1);
-  //   }
-  // }
-
-  // void _zoomOut() {
-  //   double currentZoom = _mapController.zoom;
-  //   if (currentZoom > _minZoom) {
-  //     _mapController.move(_mapController.center, currentZoom - 1);
-  //   }
-  // }
-
-//!-----------------------------
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: scaffoldKey, // Assign the global key here
+      key: scaffoldKey,
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
-            const SizedBox(height: 35),
-            ListTile(
-              leading: const Icon(Icons.cloud),
-              title: const Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
+            const SizedBox(height: 50),
+            InkWell(
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const Profile()),
+              ),
+              splashColor: Colors.blue.withOpacity(0.3),
+              highlightColor: Colors.blue.withOpacity(0.3),
+              child: const ListTile(
+                leading: Icon(Icons.person),
+                iconColor: Colors.black,
+                title: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text('Username Here',
@@ -83,30 +70,100 @@ class _MapScreenState extends State<MapScreen> {
                   ],
                 ),
               ),
-              onTap: () => Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const Profile())),
             ),
+            const SizedBox(height: 25),
             ...[
-              {'title': 'Current Sessions', 'page': const CurrentSessions()},
-              {'title': 'Recent Casts', 'page': const RecentCasts()},
-              {'title': 'Places', 'page': const Places()},
-              {'title': 'Catches', 'page': const Catches()},
-              {'title': 'Weather', 'page': const Weather()},
-              {'title': 'Store', 'page': const Store()},
-              {'title': 'Settings', 'page': const Settings()},
-              {'title': 'Support', 'page': const Support()},
-            ].map((item) => Column(
-                  children: [
-                    const Divider(),
-                    ListTile(
-                      title: Text(item['title'] as String),
-                      onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => item['page'] as Widget)),
+              {
+                'title': 'Current Sessions',
+                'icon': Icons.play_arrow_rounded,
+                'page': const CurrentSessions()
+              },
+              {
+                'title': 'Recent Casts',
+                'icon': Icons.replay,
+                'page': const RecentCasts()
+              },
+              {
+                'title': 'Places',
+                'icon': Icons.location_on_sharp,
+                'page': const Places()
+              },
+              {
+                'title': 'Catches',
+                'icon': Icons.sports_handball_sharp,
+                'page': const Catches()
+              },
+              {
+                'title': 'Weather',
+                'icon': Icons.wb_sunny,
+                'page': const Weather()
+              },
+              {
+                'title': 'Store',
+                'icon': Icons.storefront,
+                'page': const Store()
+              },
+              {
+                'title': 'Settings',
+                'icon': Icons.settings,
+                'page': const Settings()
+              },
+              {
+                'title': 'Support',
+                'icon': Icons.contact_support_rounded,
+                'page': const Support()
+              },
+            ].asMap().entries.map((entry) {
+              int index = entry.key;
+              var item = entry.value;
+              return Column(
+                children: [
+                  InkWell(
+                    highlightColor: Colors.transparent,
+                    splashColor: Colors.blue.withOpacity(0.3),
+                    onTap: () {
+                      setState(() {
+                        _selectedIndex = index;
+                      });
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => item['page'] as Widget,
+                        ),
+                      );
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.only(bottom: 8.0),
+                      color:
+                          _selectedIndex == index ? Colors.blue.shade100 : null,
+                      child: SizedBox(
+                        height: 55,
+                        child: ListTile(
+                          leading: Icon(
+                            item['icon'] as IconData,
+                            color: Colors.black,
+                          ),
+                          title: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                item['title'] as String,
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                          ),
+                          contentPadding:
+                              const EdgeInsets.symmetric(horizontal: 16),
+                        ),
+                      ),
                     ),
-                  ],
-                )),
+                  ),
+                ],
+              );
+            }),
           ],
         ),
       ),
@@ -136,13 +193,14 @@ class _MapScreenState extends State<MapScreen> {
             top: 40,
             left: 22,
             child: IconButton(
-              icon: const Icon(Icons.menu, size: 35, color: Colors.blue),
+              icon: const Icon(Icons.menu_outlined,
+                  size: 35, color: Color.fromARGB(255, 33, 184, 243)),
               onPressed: () {
                 scaffoldKey.currentState?.openDrawer();
               },
             ),
           ),
-          // Floating Search Bar Positioned at the Top Center
+          // Floating Search Bar
           Positioned(
             top: 40,
             left: 0,
@@ -173,8 +231,7 @@ class _MapScreenState extends State<MapScreen> {
             top: 30,
             right: 20,
             child: Column(
-              mainAxisSize:
-                  MainAxisSize.min, // Ensures tight wrapping of children
+              mainAxisSize: MainAxisSize.min,
               children: [
                 IconButton(
                   icon: const Icon(
@@ -197,7 +254,7 @@ class _MapScreenState extends State<MapScreen> {
                     );
                   },
                   child: Transform.translate(
-                    offset: const Offset(0, -10), // Moves text up slightly
+                    offset: const Offset(0, -10),
                     child: const Text(
                       'Hotspots',
                       style: TextStyle(
@@ -212,21 +269,23 @@ class _MapScreenState extends State<MapScreen> {
             ),
           ),
           Positioned(
-            bottom: 32,
+            bottom: 35,
             left: 30,
             child: Center(
               child: Container(
+                width: 40,
+                height: 40,
                 decoration: const BoxDecoration(
-                  color: Colors.blue, // Blue background color
-                  shape: BoxShape.circle, // Circular shape
+                  color: Color.fromARGB(255, 33, 184, 243),
+                  shape: BoxShape.circle,
                 ),
                 child: IconButton(
                   icon: const Icon(
                     Icons.camera_alt_rounded,
-                    color: Colors.white, // Icon color
+                    color: Colors.white,
                   ),
                   onPressed: _toggleOverlay,
-                  iconSize: 25, // Icon size
+                  iconSize: 22,
                 ),
               ),
             ),
@@ -239,7 +298,7 @@ class _MapScreenState extends State<MapScreen> {
             child: Center(
               child: SizedBox(
                 height: 55,
-                width: 150, // Adjust the width as needed
+                width: 150,
                 child: ElevatedButton(
                   onPressed: () {
                     Navigator.push(
@@ -249,55 +308,119 @@ class _MapScreenState extends State<MapScreen> {
                     );
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 15), // Only vertical padding
+                    backgroundColor: const Color.fromARGB(255, 33, 184, 243),
+                    padding: const EdgeInsets.symmetric(vertical: 15),
                   ),
                   child: const Text(
                     'Start Session',
-                    style: TextStyle(fontSize: 16, color: Colors.white),
+                    style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w700),
                   ),
                 ),
               ),
             ),
           ),
           if (_showOverlay)
-            GestureDetector(
-              onTap: _toggleOverlay,
-              child: Container(
-                color: Colors.black.withOpacity(0.5),
-                child: Center(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
+            if (_showOverlay)
+              GestureDetector(
+                onTap: _toggleOverlay,
+                child: Container(
+                  color: Colors.black.withOpacity(0.5), // Dimmed background
+                  child: Stack(
                     children: [
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    const CameraPage()), // Navigate to CameraPage
-                          );
-                        },
-                        child: const Text('Go to Camera Page'),
-                      ),
-                      const SizedBox(height: 10),
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    const CameraPage()), // Navigate to CameraPage
-                          );
-                        },
-                        child: const Text('Go to Camera Page'),
+                      Align(
+                        alignment: Alignment
+                            .bottomCenter, // Moves buttons to the bottom
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              bottom: 120.0), // Space from bottom
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment
+                                .spaceEvenly, // Space buttons evenly
+                            children: [
+                              // First Button with Icon + Text
+                              Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              const CameraPage(),
+                                        ),
+                                      );
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: const Color.fromARGB(
+                                          255, 33, 184, 243),
+                                      padding: const EdgeInsets.all(
+                                          15), // Adjust padding
+                                      shape:
+                                          const CircleBorder(), // Makes it a circle button
+                                    ),
+                                    child: const Icon(Icons.camera,
+                                        color: Colors.white,
+                                        size: 30), // Icon inside button
+                                  ),
+                                  const SizedBox(
+                                      height: 8), // Space between icon and text
+                                  const Text(
+                                    'Camera',
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                ],
+                              ),
+
+                              // Second Button with Icon + Text
+                              Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              const CameraPage(),
+                                        ),
+                                      );
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: const Color.fromARGB(
+                                          255, 33, 184, 243),
+                                      padding: const EdgeInsets.all(15),
+                                      shape: const CircleBorder(),
+                                    ),
+                                    child: const Icon(Icons.photo,
+                                        color: Colors.white,
+                                        size: 30), // Icon inside button
+                                  ),
+                                  const SizedBox(height: 8),
+                                  const Text(
+                                    'Gallery',
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                     ],
                   ),
                 ),
               ),
-            ),
+
 //!----------------------------- map buttons if needed
           // Positioned(
           //   bottom: 190,
